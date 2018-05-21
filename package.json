@@ -1,0 +1,43 @@
+{
+  "name": "guidestar",
+  "version": "1.0.0",
+  "description": "Scrap details of guidestar website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon bootstrap.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shivam8800/guidestar.git"
+  },
+  "keywords": [
+    "Hard",
+    "work",
+    "is",
+    "the",
+    "key",
+    "of",
+    "success",
+    "But",
+    "smart",
+    "work",
+    "is",
+    "better",
+    "then",
+    "hard",
+    "work"
+  ],
+  "author": "shivam raj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shivam8800/guidestar/issues"
+  },
+  "homepage": "https://github.com/shivam8800/guidestar#readme",
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1",
+    "hapi": "^17.4.0",
+    "nodemon": "^1.17.4"
+  }
+}
