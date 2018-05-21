@@ -1,6 +1,7 @@
 'use strict';
 
 const Hapi = require('hapi');
+import routes from './routes'
  
  const server  = Hapi.Server({
  	port: 8000,
@@ -8,22 +9,7 @@ const Hapi = require('hapi');
  });
 
 
-server.route({
-	method: 'GET',
-	path: '/',
-	handler: (request, h) =>{
-		return "Hello, World !";
-	}
-});
-
-server.route({
-    method: 'GET',
-    path: '/{name}',
-    handler: (request, h) => {
-
-        return 'Hello, ' + encodeURIComponent(request.params.name) + '!';
-    }
-});
+server.route(routes)
 
  const init = async () => {
  	
