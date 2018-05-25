@@ -1,0 +1,78 @@
+XPATH OF ALL DETAILS 
+
+--->>>>URL = "https://guidestarindia.org/Organisation(or "Summary").aspx?CCReg=10207"
+
+1. Beneficiary Groups 
+	a.Children = "//*[@id="Anthem_SectionPlaceHolder1_ctl01_ComboControl1_ctl01__"]/fieldset/ul/li[1]"
+	b.Orphans = "//*[@id="Anthem_SectionPlaceHolder1_ctl01_ComboControl1_ctl01__"]/fieldset/ul/li[2]"
+
+2.name_of_organisation = "//*[@id="SectionPlaceHolder1_ctl01_ctpTxtCharityName"]/div/span[1]";
+3.organisation_website = null
+4.organisation_primary_email = "//*[@id="SectionPlaceHolder1"]/table[1]/tbody/tr[4]/td[2]/table/tbody/tr[1]/td[1]/table/tbody/tr[2]/td[2]/span[2]/a"
+
+5.state = "//*[@id="Anthem_SectionPlaceHolder1_ctl01_ccAddrState_ctl01__"]/span[1]"
+6.telephone = "//*[@id="SectionPlaceHolder1_ctl01_DynVariableList2_ctl08_txtPhoneNum"]/div/span[1]"
+7.ho_name = "//*[@id="SectionPlaceHolder1_ctl01_DynVariableList4_ctl09_TextControl17"]/div/span[1]"
+8.ho_email = "//*[@id="SectionPlaceHolder1_ctl01_DynVariableList4_ctl09_TextControl19"]/div/span[1]";
+9.ho_telephone = null
+
+10.ho_mobile = "//*[@id="SectionPlaceHolder1_ctl01_DynVariableList4_ctl07_TextControl21"]/div/span[2]"
+11.ocp_name = null
+12.ocp_email = null
+13.ocp_telephone = null
+14.ocp_mobile = null
+
+
+---->>>>URL = "https://guidestarindia.org/Organisation(or "Summary").aspx?CCReg=5008"
+
+1. Beneficiary Groups 
+	a.Children = "//*[@id="Anthem_SectionPlaceHolder1_ctl01_ComboControl1_ctl01__"]/fieldset/ul/li"
+
+2.name_of_organisation 
+3.organisation_website 
+4.organisation_primary_email
+
+5.state
+6.telephone
+7.ho_name
+8.ho_email
+9.ho_telephone 
+
+10.ho_mobile
+11.ocp_name
+12.ocp_email
+13.ocp_telephone
+14.ocp_mobile
+
+
+
+
+
+---->>>>URL = "https://guidestarindia.org/Organisation(or "Summary").aspx?CCReg=101"
+
+1. Beneficiary Groups 
+	a.Adolescents = "//*[@id="Anthem_SectionPlaceHolder1_ctl01_ComboControl1_ctl01__"]/fieldset/ul/li[1]"
+	b.Youth = "//*[@id="Anthem_SectionPlaceHolder1_ctl01_ComboControl1_ctl01__"]/fieldset/ul/li"
+	c.Girl child = "//*[@id="Anthem_SectionPlaceHolder1_ctl01_ComboControl1_ctl01__"]/fieldset/ul/li[3]"
+	d.Students = "//*[@id="Anthem_SectionPlaceHolder1_ctl01_ComboControl1_ctl01__"]/fieldset/ul/li[8]"
+	e.street children = "//*[@id="Anthem_SectionPlaceHolder1_ctl01_ComboControl1_ctl01__"]/fieldset/ul/li[6]"
+
+2.name_of_organisation = "//*[@id="SectionPlaceHolder1_ctl01_ctpTxtCharityName"]/div/span[1]";
+3.organisation_website = "//*[@id="SectionPlaceHolder1"]/table[1]/tbody/tr[4]/td[2]/table/tbody/tr[1]/td[1]/table/tbody/tr[2]/td[2]/span[3]/a"
+4.organisation_primary_email = "//*[@id="SectionPlaceHolder1"]/table[1]/tbody/tr[4]/td[2]/table/tbody/tr[1]/td[1]/table/tbody/tr[2]/td[2]/span[2]/a"
+
+5.state = "//*[@id="Anthem_SectionPlaceHolder1_ctl01_ccAddrState_ctl01__"]/span[1]"
+6.telephone = "//*[@id="SectionPlaceHolder1_ctl01_DynVariableList2_ctl14_txtPhoneNum"]/div/span[1]"
+7.ho_name = "//*[@id="SectionPlaceHolder1_ctl01_DynVariableList4_ctl09_TextControl17"]/div/span[1]"
+8.ho_email = "//*[@id="SectionPlaceHolder1_ctl01_DynVariableList4_ctl09_TextControl19"]/div/span[1]";
+9.ho_telephone = "//*[@id="SectionPlaceHolder1_ctl01_DynVariableList4_ctl07_TextControl20"]/div/span[2]"
+
+10.ho_mobile = "//*[@id="SectionPlaceHolder1_ctl01_DynVariableList4_ctl07_TextControl21"]/div/span[2]"
+11.ocp_name = "//*[@id="SectionPlaceHolder1_ctl01_DynVariableList3_ctl09_TextControl14"]/div/span[1]"
+12.ocp_email = "//*[@id="SectionPlaceHolder1_ctl01_DynVariableList3_ctl09_TextControl16"]/div/span[1]"
+13.ocp_telephone = "//*[@id="SectionPlaceHolder1_ctl01_DynVariableList3_ctl07_TextControl2"]/div/span[2]"
+14.ocp_mobile = null
+
+
+
+
