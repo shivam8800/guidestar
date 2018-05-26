@@ -5,6 +5,9 @@ var request1 = require('request');
 const cheerio = require('cheerio');
 const async = require('async');
 
+var kue = require('kue')
+var queue = kue.createQueue();
+
 const routes = [
 	{
 		method: 'GET',
@@ -144,30 +147,44 @@ const routes = [
 
 			}
 
-			var k = 101;
 			var count = 0;
-			while (k<=200){
-				console.log(k);
-				var detail = {
-					name_of_organisation: "",
-					organisation_website: "",
-					organisation_primary_email: "",
-					state: "",
-					telephone: 0,
 
-					ho_name: "",
-					ho_email: "",
-					ho_telephone: 0,
-					ho_mobile: 0,
-					
-					ocp_name: "",
-					ocp_email: "",
-					ocp_telephone: 0,
-					ocp_mobile: 0 
-				}
-				await organisationPage(k,detail);
-				k = k +1;
-			}
+			var job = queue.create('scrape', {
+			    title: 'jskfjdskjf'
+			}).attempts(5).save(function(err) {
+			    if (!err) console.log(job.id);
+			});
+
+			// while (k<=10207){
+
+
+			queue.process('scrape',function(){
+				var k = 101;
+				while (k <= 103){
+					var detail = {
+						name_of_organisation: "",
+						organisation_website: "",
+						organisation_primary_email: "",
+						state: "",
+						telephone: 0,
+
+						ho_name: "",
+						ho_email: "",
+						ho_telephone: 0,
+						ho_mobile: 0,
+						
+						ocp_name: "",
+						ocp_email: "",
+						ocp_telephone: 0,
+						ocp_mobile: 0 
+					}
+					organisationPage(k,detail);
+					k++;
+				}	
+			});
+				// await organisationPage(k,detail);
+				// k = k +1;
+			// }
 
 			return null;
 	    }
