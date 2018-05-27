@@ -5,6 +5,8 @@ var request1 = require('request');
 const cheerio = require('cheerio');
 const async = require('async');
 
+var fs = require('fs');
+
 var kue = require('kue')
 var queue = kue.createQueue();
 
@@ -21,7 +23,37 @@ const routes = [
 		method: 'GET',
 	    path: '/scrape_NGOs',
 	    handler: async (request, h) => {
+	    	// var final_list = [];
 	    	var benefiary_group = ['Adolescents', 'Children', 'Girl Child', 'Orphans', 'Street Children', 'Students', 'Youth']
+
+	   //  	function splitingEmails(string, detail){
+	   //  		var web1 = ""
+				// var list1 = [];
+				// var aftersymbol = ""
+
+				// for (var i=0; i < string.length; i ++){
+				// 	if (string[i] == "@"){
+				// 		web1 = string.substring(0,i);
+				// 		var new_string = string.replace(web1,"");
+				// 		for (var j=0; j < new_string.length; j++) {
+				// 			if (new_string[j] == "w" && new_string[j+1] == "w" && new_string[j+2] == "w"){
+				// 				list1.push(web1);
+				// 				var web2 =  new_string.replace(aftersymbol, "")
+				// 				list1.push(web2);
+				// 				return list1
+				// 				break;
+				// 			} else {
+				// 				web1 = web1 + new_string[j];
+				// 				aftersymbol = aftersymbol + new_string[j];
+				// 			}
+				// 		}
+				// 		break;
+				// 	}
+				// }
+
+				// detail.organisation_primary_email = list1[0];
+				// detail.organisation_website = list1[1];
+	   //  	}
 
 			async function organisationPage(k, detail){
 				var web_url = 'https://guidestarindia.org/Organisation.aspx?CCReg=' + k.toString();
@@ -32,9 +64,12 @@ const routes = [
 				  headers: 
 				   { 'user-agent': 'Mozilla/5.0',
 				     'Cache-Control': 'no-cache' } };
-
 				request1(options, function (error, response, body) {
-				  if (error) throw new Error(error);
+				  // if (error) throw new Error(error);
+				  // if (!error){
+				  // 	console.log(k,"fdsfsd",error)
+				  // }
+				  if (body != "" && !error){
 					var $ = cheerio.load(body);
 					var benefiary_list = []
 					var span = $('#SectionPlaceHolder1_ctl01_ComboControl1 ul');
@@ -65,7 +100,7 @@ const routes = [
 									   { 'user-agent': 'Mozilla/5.0',
 									     'Cache-Control': 'no-cache' } };
 
-									request1(options1, function (err, res, html) {
+									request1(options1,function (err, res, html) {
 										var doc = cheerio.load(html);
 										// this is for organisation_name
 										var organisation_name = doc('#SectionPlaceHolder1_ctl01_ctpTxtCharityName span').text();
@@ -73,33 +108,13 @@ const routes = [
 										// this is for organisation_website and organisation_primary_email address
 										var organisation_web = doc('#SectionPlaceHolder1_ctl01_listOtherCharityName').parent().each(function(e, element){
 												var string = doc(this).find('span div.CTPParaClippingHeaderLabel').parent().find('a').text();
-												// await splitingEmails(string);
-												var web1 = ""
-												var list1 = [];
-												var aftersymbol = ""
+													// splitingEmails(string, detail);
+													var list1 = string.split('www.');
 
-												for (var i=0; i < string.length; i ++){
-													if (string[i] == "@"){
-														web1 = string.substring(0,i);
-														var new_string = string.replace(web1,"");
-														for (var j=0; j < new_string.length; j++) {
-															if (new_string[j] == "w" && new_string[j+1] == "w" && new_string[j+2] == "w"){
-																list1.push(web1);
-																var web2 =  new_string.replace(aftersymbol, "")
-																list1.push(web2);
-																return list1
-																break;
-															} else {
-																web1 = web1 + new_string[j];
-																aftersymbol = aftersymbol + new_string[j];
-															}
-														}
-														break;
-													}
-												}
+													detail.organisation_primary_email = list1[0];
+													detail.organisation_website = list1[1];
 
-												detail.organisation_primary_email = list1[0];
-												detail.organisation_website = list1[1];
+
 											});
 										// this if for state
 										var state = doc('#Anthem_SectionPlaceHolder1_ctl01_ccAddrState_ctl01__ span').text();
@@ -133,7 +148,13 @@ const routes = [
 
 										detail.ocp_mobile = ocp_mobile.replace(/\D/g,'');
 										count = count +1;
-										console.log(count, "each execution", detail);
+										console.log(count, "each execution", k , detail);
+										// final_list.push(detail);
+										// if (count == 5){
+										// 	console.log(final_list);
+										// 	let data = JSON.stringify(final_list);  
+										// 	fs.writeFileSync('student-2.json', data); 
+										// }
 										return detail
 									});
 						  			break;
@@ -142,6 +163,7 @@ const routes = [
 						  });
 						
 					}
+				}
 
 				});
 
@@ -155,12 +177,10 @@ const routes = [
 			    if (!err) console.log(job.id);
 			});
 
-			// while (k<=10207){
-
-
-			queue.process('scrape',function(){
-				var k = 101;
-				while (k <= 103){
+			queue.process('scrape',function(job,done){
+				var k = 3282;
+				while (k <= 3282){
+					console.log(k);
 					var detail = {
 						name_of_organisation: "",
 						organisation_website: "",
@@ -180,11 +200,9 @@ const routes = [
 					}
 					organisationPage(k,detail);
 					k++;
-				}	
+				}
+
 			});
-				// await organisationPage(k,detail);
-				// k = k +1;
-			// }
 
 			return null;
 	    }
