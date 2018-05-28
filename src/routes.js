@@ -23,7 +23,7 @@ const routes = [
 		method: 'GET',
 	    path: '/scrape_NGOs',
 	    handler: async (request, h) => {
-	    	// var final_list = [];
+	    	var final_list = [];
 	    	var benefiary_group = ['Adolescents', 'Children', 'Girl Child', 'Orphans', 'Street Children', 'Students', 'Youth']
 
 	   //  	function splitingEmails(string, detail){
@@ -56,6 +56,7 @@ const routes = [
 	   //  	}
 
 			async function organisationPage(k, detail){
+				console.log("calling funtion");
 				var web_url = 'https://guidestarindia.org/Organisation.aspx?CCReg=' + k.toString();
 				var options = { method: 'GET',
 				  url: web_url,
@@ -64,7 +65,7 @@ const routes = [
 				  headers: 
 				   { 'user-agent': 'Mozilla/5.0',
 				     'Cache-Control': 'no-cache' } };
-				request1(options, function (error, response, body) {
+				request1(options, function (error, response, body) {console.log("1st request", k);
 				  // if (error) throw new Error(error);
 				  // if (!error){
 				  // 	console.log(k,"fdsfsd",error)
@@ -89,6 +90,7 @@ const routes = [
 						  	}
 						  	for(var i =0; i < benefiary_list.length; i++){
 						  		if (benefiary_group.indexOf(benefiary_list[i]) != -1){
+						  			console.log("main request1",k);
 						  			// for scraping  summary page
 
 									var web_url = 'https://guidestarindia.org/Summary.aspx?CCReg=' + k.toString();
@@ -127,7 +129,7 @@ const routes = [
 										detail.ho_name = ho_name;
 
 										var ho_email = doc('#SectionPlaceHolder1_ctl01_DynVariableList4_ctl09_TextControl19 span').text();
-										detail.ho_email = ho_email;	
+										detail.ho_email = ho_email;
 
 										var ho_telephone = doc('#SectionPlaceHolder1_ctl01_DynVariableList4_ctl07_TextControl20 span').text();
 										detail.ho_telephone = ho_telephone.replace(/\D/g,'');																
@@ -149,12 +151,12 @@ const routes = [
 										detail.ocp_mobile = ocp_mobile.replace(/\D/g,'');
 										count = count +1;
 										console.log(count, "each execution", k , detail);
-										// final_list.push(detail);
-										// if (count == 5){
-										// 	console.log(final_list);
-										// 	let data = JSON.stringify(final_list);  
-										// 	fs.writeFileSync('student-2.json', data); 
-										// }
+										final_list.push(detail);
+										if (count == 62){
+											console.log(final_list);
+											let data = JSON.stringify(final_list);  
+											fs.writeFileSync('all_ngos_details1.json', data); 
+										}
 										return detail
 									});
 						  			break;
@@ -178,8 +180,8 @@ const routes = [
 			});
 
 			queue.process('scrape',function(job,done){
-				var k = 3282;
-				while (k <= 3282){
+				var k = 101;
+				while (k <= 200){
 					console.log(k);
 					var detail = {
 						name_of_organisation: "",
