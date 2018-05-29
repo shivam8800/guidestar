@@ -10,6 +10,7 @@ var fs = require('fs');
 var kue = require('kue')
 var queue = kue.createQueue();
 
+
 const routes = [
 	{
 		method: 'GET',
@@ -23,7 +24,7 @@ const routes = [
 		method: 'GET',
 	    path: '/scrape_NGOs',
 	    handler: async (request, h) => {
-	    	var final_list = [];
+	    	var final_list = []
 	    	var benefiary_group = ['Adolescents', 'Children', 'Girl Child', 'Orphans', 'Street Children', 'Students', 'Youth']
 
 	   //  	function splitingEmails(string, detail){
@@ -56,7 +57,6 @@ const routes = [
 	   //  	}
 
 			async function organisationPage(k, detail){
-				console.log("calling funtion");
 				var web_url = 'https://guidestarindia.org/Organisation.aspx?CCReg=' + k.toString();
 				var options = { method: 'GET',
 				  url: web_url,
@@ -65,7 +65,7 @@ const routes = [
 				  headers: 
 				   { 'user-agent': 'Mozilla/5.0',
 				     'Cache-Control': 'no-cache' } };
-				request1(options, function (error, response, body) {console.log("1st request", k);
+				request1(options, function (error, response, body) {
 				  // if (error) throw new Error(error);
 				  // if (!error){
 				  // 	console.log(k,"fdsfsd",error)
@@ -90,7 +90,6 @@ const routes = [
 						  	}
 						  	for(var i =0; i < benefiary_list.length; i++){
 						  		if (benefiary_group.indexOf(benefiary_list[i]) != -1){
-						  			console.log("main request1",k);
 						  			// for scraping  summary page
 
 									var web_url = 'https://guidestarindia.org/Summary.aspx?CCReg=' + k.toString();
@@ -102,68 +101,83 @@ const routes = [
 									   { 'user-agent': 'Mozilla/5.0',
 									     'Cache-Control': 'no-cache' } };
 
-									request1(options1,function (err, res, html) {
-										var doc = cheerio.load(html);
-										// this is for organisation_name
-										var organisation_name = doc('#SectionPlaceHolder1_ctl01_ctpTxtCharityName span').text();
-										detail.name_of_organisation = organisation_name;
-										// this is for organisation_website and organisation_primary_email address
-										var organisation_web = doc('#SectionPlaceHolder1_ctl01_listOtherCharityName').parent().each(function(e, element){
-												var string = doc(this).find('span div.CTPParaClippingHeaderLabel').parent().find('a').text();
-													// splitingEmails(string, detail);
-													var list1 = string.split('www.');
+									request1(options1, async function (err, res, html) {
+										// if (html != "" && !err){
+											var doc = await cheerio.load(html);
+											// this is for organisation_name
+											var organisation_name = doc('#SectionPlaceHolder1_ctl01_ctpTxtCharityName span').text();
+											detail.name_of_organisation = organisation_name;
+											// this is for organisation_website and organisation_primary_email address
+											var organisation_web = doc('#SectionPlaceHolder1_ctl01_listOtherCharityName').parent().each(function(e, element){
+													var string = doc(this).find('span div.CTPParaClippingHeaderLabel').parent().find('a').text();
+														// splitingEmails(string, detail);
+														var list1 = string.split('www.');
 
-													detail.organisation_primary_email = list1[0];
-													detail.organisation_website = list1[1];
-
-
-											});
-										// this if for state
-										var state = doc('#Anthem_SectionPlaceHolder1_ctl01_ccAddrState_ctl01__ span').text();
-										detail.state = state;
-										// this if for telephone
-										var telephone = doc('#SectionPlaceHolder1_ctl01_DynVariableList2_ctl14_txtPhoneNum span').text();
-										detail.telephone = telephone;
-
-										var ho_name = doc('#SectionPlaceHolder1_ctl01_DynVariableList4_ctl09_TextControl17 span').text();
-										detail.ho_name = ho_name;
-
-										var ho_email = doc('#SectionPlaceHolder1_ctl01_DynVariableList4_ctl09_TextControl19 span').text();
-										detail.ho_email = ho_email;
-
-										var ho_telephone = doc('#SectionPlaceHolder1_ctl01_DynVariableList4_ctl07_TextControl20 span').text();
-										detail.ho_telephone = ho_telephone.replace(/\D/g,'');																
-										var ho_mobile = doc('#SectionPlaceHolder1_ctl01_DynVariableList4_ctl07_TextControl21 span').text();
-
-										detail.ho_mobile = ho_mobile.replace(/\D/g,'');
+														detail.organisation_primary_email = list1[0];
+														detail.organisation_website = list1[1];
 
 
-										var ocp_name = doc('#SectionPlaceHolder1_ctl01_DynVariableList3_ctl09_TextControl14 span').text();
-										detail.ocp_name = ocp_name;
+												});
+											// this if for state
+											var state = doc('#Anthem_SectionPlaceHolder1_ctl01_ccAddrState_ctl01__ span').text();
+											detail.state = state;
+											// this if for telephone
+											var telephone = doc('#SectionPlaceHolder1_ctl01_DynVariableList2_ctl14_txtPhoneNum span').text();
+											detail.telephone = telephone;
 
-										var ocp_email = doc('#SectionPlaceHolder1_ctl01_DynVariableList3_ctl09_TextControl16 span').text();
-										detail.ocp_email = ocp_email;	
+											var ho_name = doc('#SectionPlaceHolder1_ctl01_DynVariableList4_ctl09_TextControl17 span').text();
+											detail.ho_name = ho_name;
 
-										var ocp_telephone = doc('#SectionPlaceHolder1_ctl01_DynVariableList3_ctl07_TextControl2 span').text();
-										detail.ocp_telephone = ocp_telephone.replace(/\D/g,'');																
-										var ocp_mobile = doc('#SectionPlaceHolder1_ctl01_DynVariableList3_ctl07_TextControl8 span').text();
+											var ho_email = doc('#SectionPlaceHolder1_ctl01_DynVariableList4_ctl09_TextControl19 span').text();
+											detail.ho_email = ho_email;
 
-										detail.ocp_mobile = ocp_mobile.replace(/\D/g,'');
-										count = count +1;
-										console.log(count, "each execution", k , detail);
-										final_list.push(detail);
-										if (count == 62){
-											console.log(final_list);
-											let data = JSON.stringify(final_list);  
-											fs.writeFileSync('all_ngos_details1.json', data); 
-										}
-										return detail
+											var ho_telephone = doc('#SectionPlaceHolder1_ctl01_DynVariableList4_ctl07_TextControl20 span').text();
+											detail.ho_telephone = ho_telephone.replace(/\D/g,'');																
+											var ho_mobile = doc('#SectionPlaceHolder1_ctl01_DynVariableList4_ctl07_TextControl21 span').text();
+
+											detail.ho_mobile = ho_mobile.replace(/\D/g,'');
+
+
+											var ocp_name = doc('#SectionPlaceHolder1_ctl01_DynVariableList3_ctl09_TextControl14 span').text();
+											detail.ocp_name = ocp_name;
+
+											var ocp_email = doc('#SectionPlaceHolder1_ctl01_DynVariableList3_ctl09_TextControl16 span').text();
+											detail.ocp_email = ocp_email;	
+
+											var ocp_telephone = doc('#SectionPlaceHolder1_ctl01_DynVariableList3_ctl07_TextControl2 span').text();
+											detail.ocp_telephone = ocp_telephone.replace(/\D/g,'');																
+											var ocp_mobile = doc('#SectionPlaceHolder1_ctl01_DynVariableList3_ctl07_TextControl8 span').text();
+
+											detail.ocp_mobile = ocp_mobile.replace(/\D/g,'');
+											count = count +1;
+											console.log(count, "each execution", k , detail);
+											final_list.push(detail);
+											// if (count >= 15){
+											// 	fs.readFile('all_ngos_details1.json', 'utf8', function readFileCallback(err, data){
+											// 	    if (err){
+											// 	        console.log(err);
+											// 	    } else {
+											// 	    var obj = JSON.parse(data); //now it an object
+											// 	    obj.table.push(final_list); //add some data
+											// 	    var json = JSON.stringify(obj); //convert it back to json
+											// 	    fs.writeFile('all_ngos_details1.json', json, 'utf8', function(){
+											// 	    	console.log("yeah done");
+											// 	    }); // write it back 
+											// 	}});
+											// }
+
+											return detail
+										// }
 									});
 						  			break;
+						  		} else {
+						  			console.log("benefiary_list not valid",k);
 						  		}
 						  	}
 						  });
 						
+					} else {
+						console.log(k, "not found")
 					}
 				}
 
@@ -179,9 +193,10 @@ const routes = [
 			    if (!err) console.log(job.id);
 			});
 
+
 			queue.process('scrape',function(job,done){
-				var k = 101;
-				while (k <= 200){
+				var k = 2600;
+				while (k <= 2800 ){
 					console.log(k);
 					var detail = {
 						name_of_organisation: "",
@@ -205,7 +220,11 @@ const routes = [
 				}
 
 			});
+			queue.on('complete', function(result){
+			  console.log('Job completed with data ', result);
 
+			});
+			
 			return null;
 	    }
 
