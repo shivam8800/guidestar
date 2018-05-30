@@ -8,7 +8,6 @@ import routes from './routes'
  	host: 'localhost'
  });
 
-
 server.route(routes)
 
  const init = async () => {
